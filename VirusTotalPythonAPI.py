@@ -11,8 +11,7 @@ def filescan(file): #arg to be provided as string in quotes
         analysis = client.scan_file(f, wait_for_completion=True)
         if analysis.stats['malicious']>0 or analysis.stats['suspicious']>0:
             return ('suspicious file')
-        elif analysis.stats['failure']>0 or analysis.stats['timeout']>0 \
-        or analysis.stats['confirmed-timeout']>0:
+        elif analysis.stats['failure']>0 or analysis.stats['timeout']>0 or analysis.stats['confirmed-timeout']>0:
             return ('scan failed')
         elif analysis.stats['undetected']>10:
             return ('too many undetected hits (i.e. inconclusive)')
@@ -24,10 +23,10 @@ def filescan(file): #arg to be provided as string in quotes
 def urlscan(url): #arg to be provided as string in quotes
     url_id = vt.url_id(url)
     url = client.get_object('/urls/{}', url_id)
-    if url.last_analysis_stats['malicious']>0 \
-    or url.last_analysis_stats['undetected']>10 \
-    or analysis.stats['suspicious']>0:
+    if url.last_analysis_stats['malicious']>0 or analysis.stats['suspicious']>0:
         return ('suspicious file')
+    elif url.last_analysis_stats['undetected'] > 10:
+        return ('too many undetected hits (i.e. inconclusive)')
     elif url.last_analysis_stats['timeout']>0:
         return ('timeout')
     else:
